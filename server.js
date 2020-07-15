@@ -40,7 +40,7 @@ app.delete('/', function (req, res) {
         res.send(cook);
     })
         .catch(err => {
-            res.send({message: 'there is no cook with that id'})
+            res.send({message: err})
         })
 });
 
