@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const port = 8080;
-const host = '192.168.0.107';
+const host = '172.16.2.244';
 const bodyParser = require('body-parser');
 const Cook = require('./models/cook');
 
@@ -10,6 +10,9 @@ app.use(bodyParser.json());
 app.get('/', async (req, res)=>{
     await Cook.find()
         .then((cooks)=>{
+            console.log('GET request from:', req.headers['user-agent']);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             res.send(cooks);
         })
         .catch((err)=>{
