@@ -12,6 +12,9 @@ const CookSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    img: {
+        type: String
     }
 });
 
