@@ -15,6 +15,9 @@ const CookSchema = mongoose.Schema({
     },
     img: {
         type: String
+    },
+    worktime: {
+        type: Number
     }
 });
 

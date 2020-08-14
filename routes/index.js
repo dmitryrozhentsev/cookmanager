@@ -48,7 +48,9 @@ module.exports = function (app) {
         console.log('POST request from:', req.headers['user-agent']);
         const cook = new Cook({
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+            img: req.body.img,
+            worktime: req.body.worktime
         });
 
         cook.save()
