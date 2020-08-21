@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const Cook = require('../models/cook');
 const fs = require('fs');
@@ -19,21 +20,47 @@ module.exports = function (app) {
 
     const upload = multer({storage: storage});
 
-    app.post("/upload", upload.single('df'), async (req, res) => {
-        let filedata = req.file;
-        console.log(req.body.name);
+    app.post("/", upload.single('img'), async (req, res) => {
+        //console.log('POST request from:', req.headers['user-agent']);
+        console.log(req.body);
+        let filedata = req.file ? req.file : null;
+
         if(!filedata){
-            res.send("Файл не загружен");
-        }else{
-            res.send(`Файл загружен: ${JSON.stringify(filedata)}`);
+            console.log('there is no file');
         }
+
+        const cook = new Cook({
+            title: req.body.title,
+            description: req.body.description ? req.body.description : '',
+            worktime: req.body.worktime ? req.body.worktime : '',
+            ingredients: req.body.ingredients ? req.body.ingredients : '',
+            img: req.file ? req.file.filename : ''
+        });
+        cook.save()
+            .catch(err => {
+                res.send({message: err})
+            })
+            .then(data => {
+                res.send(data);
+            });
     });
 
+    app.get('/:uid', async (req, res, next) => {
+        const test = await Cook.findById(req.params.uid)
+            .then((cook)=>{
+                res.send(cook);
+            })
+            .catch((err)=>{
+                res.send({
+                    message: err
+                })
+            })
+    });
 
     app.get('/', async (req, res) => {
+        console.log('GET request from:', req.headers['user-agent']);
         await Cook.find()
             .then((cooks)=>{
-                console.log('GET request from:', req.headers['user-agent']);
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
                 res.send(cooks);
@@ -43,24 +70,8 @@ module.exports = function (app) {
             });
     });
 
-    app.post('/', async (req, res) => {
-        console.log(req.body);
-        console.log('POST request from:', req.headers['user-agent']);
-        const cook = new Cook({
-            title: req.body.title,
-            description: req.body.description,
-            img: req.body.img,
-            worktime: req.body.worktime
-        });
 
-        cook.save()
-            .then(data => {
-                res.json(data);
-            })
-            .catch(err => {
-                res.json({message: err})
-            });
-    });
+
 
     app.delete('/', async (req, res) => {
         console.log(req.body);

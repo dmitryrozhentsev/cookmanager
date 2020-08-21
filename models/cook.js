@@ -6,8 +6,7 @@ const CookSchema = mongoose.Schema({
         required: true
     },
     description: {
-        type:String,
-        required: true
+        type:String
     },
     date: {
         type: Date,
@@ -18,6 +17,9 @@ const CookSchema = mongoose.Schema({
     },
     worktime: {
         type: Number
+    },
+    ingredients: {
+        type: Array
     }
 });
 
