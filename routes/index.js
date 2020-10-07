@@ -48,6 +48,8 @@ module.exports = function (app) {
     app.get('/:uid', async (req, res, next) => {
         const test = await Cook.findById(req.params.uid)
             .then((cook)=>{
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
                 res.send(cook);
             })
             .catch((err)=>{

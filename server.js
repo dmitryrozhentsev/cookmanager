@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const Cook = require('./models/cook');
 const port = 8080;
-const host = '172.16.2.244';
+const host = '172.16.2.201';
 
 app.use(express.static(__dirname + "/static"));
 
