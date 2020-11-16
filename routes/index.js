@@ -14,7 +14,8 @@ module.exports = function (app) {
             cb(null, './static/img')
         },
         filename: function (req, file, cb) {
-            cb(null, `${Date.now()}${file.originalname}`);
+            const fileName = file.originalname.replace(/\s+/g, '');
+            cb(null, `${Date.now()}${fileName}`);
         }
     });
 
@@ -22,7 +23,6 @@ module.exports = function (app) {
 
     app.post("/", upload.single('img'), async (req, res) => {
         //console.log('POST request from:', req.headers['user-agent']);
-        console.log(req.body);
         let filedata = req.file ? req.file : null;
 
         if(!filedata){
